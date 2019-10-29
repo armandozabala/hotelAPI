@@ -17,6 +17,35 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/hotel/:name', (req, res) => {
+
+    const { name } = req.params;
+
+    mysqlConnection.query(`SELECT * FROM hotel WHERE nombre LIKE '%${name}%'`, (err, rows, fields) => {
+        if (!err) {
+            res.json(rows);
+        } else {
+            console.log(err);
+        }
+
+    });
+});
+
+router.get('/hotel/category/:cat', (req, res) => {
+
+    const { cat } = req.params;
+
+    mysqlConnection.query(`SELECT * FROM hotel WHERE categoria = ${cat}`, (err, rows, fields) => {
+
+        if (!err) {
+            res.json(rows);
+        } else {
+            console.log(err);
+        }
+
+    });
+});
+
 router.get('/:id', (req, res) => {
 
     const { id } = req.params;
@@ -35,13 +64,13 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
 
-    const { id, nombre, categoria, direccion, foto } = req.body;
+    const { id, nombre, categoria, precio, direccion, foto } = req.body;
 
     const query = `
-        CALL hotelAddOrEdit(?,?,?,?,?);
+        CALL hotelAddOrEdit(?,?,?,?,?,?);
     `;
 
-    mysqlConnection.query(query, [id, nombre, categoria, direccion, foto], (err, rows, fields) => {
+    mysqlConnection.query(query, [id, nombre, precio, categoria, direccion, foto], (err, rows, fields) => {
 
         if (!err) {
             res.json({ Status: 'Hotel Added' });
@@ -52,13 +81,13 @@ router.post('/', (req, res) => {
     })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/hot/:id', (req, res) => {
 
     const { id } = req.params;
-    const { nombre, direccion, categoria, foto } = req.body;
-    const query = 'CALL hotelAddOrEdit(?,?,?,?,?)';
+    const { nombre, direccion, precio, categoria, foto } = req.body;
+    const query = 'CALL hotelAddOrEdit(?,?,?,?,?,?)';
 
-    mysqlConnection.query(query, [id, nombre, categoria, direccion, foto], (err, rows, fields) => {
+    mysqlConnection.query(query, [id, nombre, categoria, precio, direccion, foto], (err, rows, fields) => {
 
         if (!err) {
             res.json({ status: 'Hotel updated' })
