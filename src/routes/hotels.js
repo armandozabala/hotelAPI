@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const mysqlConnection = require('../database');
+const mysqlConnection = require('../databaseConfig');
 
 
 
